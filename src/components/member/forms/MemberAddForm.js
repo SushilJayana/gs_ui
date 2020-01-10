@@ -42,9 +42,23 @@ export default function MemberAddForm(props) {
             </Col>
           </Form.Group>
 
+          {
+            (props.formData.id) ?
+              <Form.Group as={Row} controlId="isPasswordUpdate">
+                <Form.Label column md={3}></Form.Label>
+                <Col md={9}><Form.Check type="checkbox" onChange={() => {
+                  props.handlePasswordChange()
+                }
+                } /></Col>
+              </Form.Group> :
+              ""
+          }
+
           <Form.Group as={Row} controlId="password">
             <Form.Label column md={3}>Password</Form.Label>
-            <Col md={9}><Form.Control type="password" /></Col>
+            <Col md={9}><Form.Control type="password"
+              disabled={(props.formData.id) ? "disabled" : ""} />
+            </Col>
           </Form.Group>
 
           <Form.Group as={Row} controlId="user_type">
@@ -69,8 +83,8 @@ export default function MemberAddForm(props) {
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
           <Button variant="success" type="submit" onClick={e => {
-             (props.formData.id)? props.handleEditMember(e):props.handleAddNewMember(e); 
-          }}>{(props.formData.id)?"Edit":"Save"}</Button>
+            (props.formData.id) ? props.handleEditMember(e) : props.handleAddNewMember(e);
+          }}>{(props.formData.id) ? "Edit" : "Save"}</Button>
         </Modal.Footer>
       </Form>
     </Modal>

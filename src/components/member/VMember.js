@@ -17,7 +17,7 @@ export default function VMember(props) {
           <td>
             <Button variant="info" onClick={e => props.showEditForm(e)}>Edit</Button>
             <span> | </span>
-            <Button variant="danger">Delete</Button>
+            <Button variant="danger" onClick={e => props.handleDeleteMember(e)}>Delete</Button>
           </td>
         </tr>
       );

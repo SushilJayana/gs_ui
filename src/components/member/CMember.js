@@ -18,7 +18,8 @@ export default class CMember extends React.Component {
         user_type: "",
         password: "",
         joined_date: ""
-      }
+      },
+      passwordDisabled: true
     };
 
     this.toggleModalAppear = this.toggleModalAppear.bind(this);
@@ -27,6 +28,9 @@ export default class CMember extends React.Component {
 
     this.showEditForm = this.showEditForm.bind(this);
     this.handleEditMember = this.handleEditMember.bind(this);
+
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleDeleteMember = this.handleDeleteMember.bind(this);
   }
 
   componentDidMount() {
@@ -52,6 +56,16 @@ export default class CMember extends React.Component {
     this.setState({
       modalShow: showFlag
     });
+  }
+
+  handlePasswordChange() {
+    if (!this.state.passwordDisabled) {
+      document.getElementById('password').disabled = true;
+      this.setState({ passwordDisabled: true });
+    } else {
+      document.getElementById('password').disabled = false;
+      this.setState({ passwordDisabled: false });
+    }
   }
 
   //Add Form
@@ -163,9 +177,39 @@ export default class CMember extends React.Component {
     })
       .then(results => results.json())
       .then(data => {
-       
-       this.toggleModalAppear(false);
-       this.props.history.push("/member");
+
+        this.toggleModalAppear(false);
+        this.props.history.push("/member");
+      });
+  }
+
+  //Delete Member
+  handleDeleteMember(e) {
+
+    e.preventDefault();
+
+    const confirmation = window.confirm("Are you sure you want to delete? ");
+
+    if (!confirmation) {
+      return false;
+    }
+
+    const id = e.target.parentNode.parentElement.id;
+
+    const postData = {
+      id: id
+    };
+
+    fetch("http://localhost:3005/api/gs/member/remove/" + id, {
+      method: "DELETE",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(results => results.json())
+      .then(data => {
+        this.props.history.push("/member");
       });
   }
 
@@ -176,10 +220,14 @@ export default class CMember extends React.Component {
           gridData={this.state.members}
           showAddForm={this.showAddForm}
           showEditForm={this.showEditForm}
+
+          handleDeleteMember={this.handleDeleteMember}
         />
         <MemberAddForm
           show={this.state.modalShow}
           onHide={() => this.toggleModalAppear(false)}
+
+          handlePasswordChange={this.handlePasswordChange}
 
           startDate={this.state.startDate}
           handleChange={this.handleChange}
