@@ -78,7 +78,9 @@ export default class CMember extends React.Component {
       })
       .then(data => {
         this.setState({
-          formToken: data.token
+          formToken: data.token,
+          formData: { id: "" },
+          startDate : new Date()
         });
 
         this.toggleModalAppear(true);
@@ -177,7 +179,9 @@ export default class CMember extends React.Component {
     })
       .then(results => results.json())
       .then(data => {
-
+        this.setState({
+          formData: { id: "" }
+        });
         this.toggleModalAppear(false);
         this.props.history.push("/member");
       });
