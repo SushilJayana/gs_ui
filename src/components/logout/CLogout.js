@@ -1,0 +1,27 @@
+import React from "react";
+import { Button } from "react-bootstrap";
+
+class CLogout extends React.Component {
+  constructor() {
+    super();
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+  handleLogout(event) {
+    event.preventDefault();
+    localStorage.removeItem("token");
+    this.props.history.push("/login");
+  }
+  render() {
+    return (
+      <Button
+        variant="primary"
+        type="submit"
+        onClick={event => this.handleLogout(event)}
+      >
+        Logout
+      </Button>
+    );
+  }
+}
+
+export default CLogout;
