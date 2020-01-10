@@ -1,7 +1,11 @@
 import React from "react";
 import { Modal, Button, Col, Row, Form } from "react-bootstrap";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 export default function MemberAddForm(props) {
+
   return (
     <Modal
       show={props.show}
@@ -11,11 +15,11 @@ export default function MemberAddForm(props) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Add new member</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{(props.formData.id) ? "Edit Member" : "Add new member"}</Modal.Title>
       </Modal.Header>
       <Form>
-        <input type="hidden" id="_ftoken" defaultValue={props.formToken !== "null" ? props.formToken : ""}
-        />
+        <input type="hidden" id="member_id" defaultValue={(props.formData.id) ? props.formData.id : ""} />
+        <input type="hidden" id="_ftoken" defaultValue={props.formToken !== "null" ? props.formToken : ""} />
         <Modal.Body>
           <Form.Group as={Row} controlId="firstname">
             <Form.Label column md={3}> Firstname </Form.Label>
@@ -40,8 +44,7 @@ export default function MemberAddForm(props) {
 
           <Form.Group as={Row} controlId="password">
             <Form.Label column md={3}>Password</Form.Label>
-            <Col md={9}><Form.Control type="password" />
-            </Col>
+            <Col md={9}><Form.Control type="password" /></Col>
           </Form.Group>
 
           <Form.Group as={Row} controlId="user_type">
@@ -57,15 +60,17 @@ export default function MemberAddForm(props) {
 
           <Form.Group as={Row} controlId="joined_date">
             <Form.Label column md={3}>Joined Date</Form.Label>
-            <Col md={9}><Form.Control type="date"
-              defaultValue={(props.formData.joined_date) ? props.formData.joined_date : ""} />
+            <Col md={9}>
+              <DatePicker id="joined_date" selected={props.startDate} onChange={props.handleChange} />
             </Col>
           </Form.Group>
 
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
-          <Button variant="success" type="submit" onClick={e => { props.addNewMember(e); }}>Save</Button>
+          <Button variant="success" type="submit" onClick={e => {
+             (props.formData.id)? props.handleEditMember(e):props.handleAddNewMember(e); 
+          }}>{(props.formData.id)?"Edit":"Save"}</Button>
         </Modal.Footer>
       </Form>
     </Modal>
