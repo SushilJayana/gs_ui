@@ -5,6 +5,7 @@ import MemberAddForm from "./forms/MemberAddForm";
 export default class CMember extends React.Component {
   constructor() {
     super();
+
     this.state = {
       members: null,
       modalShow: false,
@@ -80,7 +81,7 @@ export default class CMember extends React.Component {
         this.setState({
           formToken: data.token,
           formData: { id: "" },
-          startDate : new Date()
+          startDate: new Date()
         });
 
         this.toggleModalAppear(true);
@@ -110,8 +111,16 @@ export default class CMember extends React.Component {
     })
       .then(results => results.json())
       .then(data => {
+
+        let finalMemberArray = this.state.members;
+        finalMemberArray.push(data);
+
+        this.setState({
+          members: finalMemberArray
+        })
+
         this.toggleModalAppear(false);
-        this.props.history.push("/member");
+
       });
   }
 
@@ -179,11 +188,23 @@ export default class CMember extends React.Component {
     })
       .then(results => results.json())
       .then(data => {
-        this.setState({
-          formData: { id: "" }
-        });
+
+        if (data.status) {
+          
+          postData.password = null;
+          postData._id = id;
+
+          let finalMemberArray = (this.state.members).filter(member => member._id !== id);
+          finalMemberArray.push(postData)
+          this.setState({
+            formData: { id: "" },
+            members: finalMemberArray
+          });
+        } else {
+          alert(data.message);
+        }
+
         this.toggleModalAppear(false);
-        this.props.history.push("/member");
       });
   }
 
@@ -213,7 +234,10 @@ export default class CMember extends React.Component {
     })
       .then(results => results.json())
       .then(data => {
-        this.props.history.push("/member");
+        const finalMemberArray = (this.state.members).filter(member => member._id !== id);
+        this.setState({
+          members: finalMemberArray
+        });
       });
   }
 
@@ -236,7 +260,7 @@ export default class CMember extends React.Component {
           startDate={this.state.startDate}
           handleChange={this.handleChange}
 
-          handleAddNewMember={this.addNewMember}
+          handleAddNewMember={this.handleAddNewMember}
           handleEditMember={this.handleEditMember}
 
           formToken={this.state.formToken}

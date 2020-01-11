@@ -14,7 +14,7 @@ class CLogout extends React.Component {
   render() {
     return (
       <Button
-        variant="primary"
+        variant="link"
         type="submit"
         onClick={event => this.handleLogout(event)}
       >

@@ -9,7 +9,7 @@ function VNavbar(props) {
         <Navbar.Brand href="#home">Gym Square</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Form inline z>
+          <Form inline>
             <CLogout {...props} />
           </Form>
         </Navbar.Collapse>

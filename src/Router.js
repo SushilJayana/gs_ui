@@ -9,8 +9,10 @@ class Router extends React.Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/login" exact strict component={CLogin} />
-          <Route path="/" render={props => <Layout {...props} />} />
+          <Route path="/login" 
+          exact strict component={CLogin} />
+          <Route path="/" 
+          render={props => <Layout {...props} />} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

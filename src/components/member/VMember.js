@@ -4,6 +4,7 @@ import dateformat from "dateformat";
 
 export default function VMember(props) {
   let gridData = null;
+  
   if (props.gridData != null) {
     gridData = props.gridData.map(item => {
       return (
