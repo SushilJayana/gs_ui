@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
 import VMember from "./VMember";
 import MemberAddForm from "./forms/MemberAddForm";
+import { connect } from "react-redux";
 
-export default class CMember extends React.Component {
-  constructor() {
-    super();
+class CMember extends React.Component {
+  constructor(props) {
+    super(props);
 
     this.state = {
       members: null,
@@ -85,6 +86,7 @@ export default class CMember extends React.Component {
         });
 
         this.toggleModalAppear(true);
+        //this.props.toggleModalAppear("SHOW");
       });
   }
 
@@ -100,6 +102,11 @@ export default class CMember extends React.Component {
       password: e.target.form.elements.password.value,
       joined_date: e.target.form.elements.joined_date.value
     };
+
+    /*  const data = new FormData(e.target.form);
+      console.log(postData);
+      console.log(data);
+      return false;*/
 
     fetch("http://localhost:3005/api/gs/member/add", {
       method: "POST",
@@ -120,6 +127,7 @@ export default class CMember extends React.Component {
         })
 
         this.toggleModalAppear(false);
+        //this.props.toggleModalAppear("HIDE");
 
       });
   }
@@ -160,6 +168,7 @@ export default class CMember extends React.Component {
               startDate: new Date(data.joined_date)
             });
             this.toggleModalAppear(true);
+            //this.props.toggleModalAppear("SHOW");
           });
       });
   }
@@ -190,9 +199,7 @@ export default class CMember extends React.Component {
       .then(data => {
 
         if (data.status) {
-          
           postData.password = null;
-          postData._id = id;
 
           let finalMemberArray = (this.state.members).filter(member => member._id !== id);
           finalMemberArray.push(postData)
@@ -204,7 +211,8 @@ export default class CMember extends React.Component {
           alert(data.message);
         }
 
-        this.toggleModalAppear(false);
+       this.toggleModalAppear(false);
+      // this.props.toggleModalAppear("HIDE")
       });
   }
 
@@ -255,6 +263,10 @@ export default class CMember extends React.Component {
           show={this.state.modalShow}
           onHide={() => this.toggleModalAppear(false)}
 
+          // show={this.props.memberFormStat.showDialog}
+          // onHide={() => this.props.toggleModalAppear("HIDE")}
+
+
           handlePasswordChange={this.handlePasswordChange}
 
           startDate={this.state.startDate}
@@ -270,3 +282,20 @@ export default class CMember extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    memberFormStat: state.memberFormStat
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleModalAppear: (type) => {
+      dispatch({ type: type });
+    }
+  };
+};
+
+export default CMember;
+//export default connect(mapStateToProps, mapDispatchToProps)(CMember);

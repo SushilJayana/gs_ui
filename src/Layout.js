@@ -15,13 +15,13 @@ export default function Layout(props) {
           <CSidebar />
           <Switch>
             <Route path="/"
-             exact strict component={CDashboard} />
-            <Route path="/dashboard" 
-            exact strict component={CDashboard} />
-            <Route path="/member" 
-            exact strict component={CMember} />
-            <Route path="/gym-package" 
-            exact strict component={CDashboard} />
+              exact strict component={CDashboard} />
+            <Route path="/dashboard"
+              exact strict component={CDashboard} />
+            <Route path="/member"
+              exact strict component={CMember} />
+            <Route path="/gym-package"
+              exact strict component={CDashboard} />
             <Route component={NotFound} />
           </Switch>
         </div>
