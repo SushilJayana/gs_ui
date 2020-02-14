@@ -12,7 +12,7 @@ class CLogin extends React.Component {
     this.submitLogin = this.submitLogin.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (localStorage.getItem("token")) {
       this.props.history.push("/dashboard")
     }
