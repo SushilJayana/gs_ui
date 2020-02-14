@@ -6,7 +6,6 @@ import NotFound from "./components/notfound/Notfound";
 import CSidebar from "./components/sidebar/CSidebar";
 import CNavbar from "./components/navbar/CNavbar";
 
-import CLogin from "./components/login/CLogin"
 
 export default function Layout(props) {
   return (
