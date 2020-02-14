@@ -12,11 +12,10 @@ class CLogin extends React.Component {
     this.submitLogin = this.submitLogin.bind(this);
   }
 
-  componentWillMount(){
-    if(this.props.isLoggedIn && localStorage.getItem("token")){
-      window.location.href = "/dashboard"
+  componentWillMount() {
+    if (localStorage.getItem("token")) {
+      this.props.history.push("/dashboard")
     }
-
   }
 
   submitLogin(event) {
