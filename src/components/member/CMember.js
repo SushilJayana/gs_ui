@@ -103,11 +103,6 @@ class CMember extends React.Component {
       joined_date: e.target.form.elements.joined_date.value
     };
 
-    /*  const data = new FormData(e.target.form);
-      console.log(postData);
-      console.log(data);
-      return false;*/
-
     fetch("http://localhost:3005/api/gs/member/add", {
       method: "POST",
       body: JSON.stringify(postData),
@@ -118,17 +113,17 @@ class CMember extends React.Component {
     })
       .then(results => results.json())
       .then(data => {
-
-        let finalMemberArray = this.state.members;
-        finalMemberArray.push(data);
-
-        this.setState({
-          members: finalMemberArray
-        })
-
-        this.toggleModalAppear(false);
-        //this.props.toggleModalAppear("HIDE");
-
+        if (data.status) {
+          let finalMemberArray = this.state.members;
+          finalMemberArray.push(data.payload);
+          this.setState({
+            members: finalMemberArray
+          })
+          this.toggleModalAppear(false);
+          //this.props.toggleModalAppear("HIDE");
+        } else {
+            alert(data.message);
+        }
       });
   }
 
@@ -169,6 +164,8 @@ class CMember extends React.Component {
             });
             this.toggleModalAppear(true);
             //this.props.toggleModalAppear("SHOW");
+          }).catch(err => {
+            alert(err.message);
           });
       });
   }
@@ -211,27 +208,22 @@ class CMember extends React.Component {
           alert(data.message);
         }
 
-       this.toggleModalAppear(false);
-      // this.props.toggleModalAppear("HIDE")
+        this.toggleModalAppear(false);
+        //this.props.toggleModalAppear("HIDE")
       });
   }
 
   //Delete Member
   handleDeleteMember(e) {
-
     e.preventDefault();
 
     const confirmation = window.confirm("Are you sure you want to delete? ");
-
     if (!confirmation) {
       return false;
     }
 
     const id = e.target.parentNode.parentElement.id;
-
-    const postData = {
-      id: id
-    };
+    const postData = { id: id };
 
     fetch("http://localhost:3005/api/gs/member/remove/" + id, {
       method: "DELETE",
@@ -263,9 +255,8 @@ class CMember extends React.Component {
           show={this.state.modalShow}
           onHide={() => this.toggleModalAppear(false)}
 
-          // show={this.props.memberFormStat.showDialog}
-          // onHide={() => this.props.toggleModalAppear("HIDE")}
-
+          /* show={this.props.formStatistics.showDialog}
+          onHide={() => this.props.toggleModalAppear("HIDE",null)} */
 
           handlePasswordChange={this.handlePasswordChange}
 
@@ -285,14 +276,14 @@ class CMember extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    memberFormStat: state.memberFormStat
+    formStatistics: state.memberFormStat
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleModalAppear: (type) => {
-      dispatch({ type: type });
+    toggleModalAppear: (type, payload) => {
+      dispatch({ type: type, payload: payload });
     }
   };
 };

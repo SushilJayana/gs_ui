@@ -8,8 +8,10 @@ class CLogout extends React.Component {
   }
   handleLogout(event) {
     event.preventDefault();
+
     localStorage.removeItem("token");
-    this.props.history.push("/login");
+    window.location.href = "/login"
+    
   }
   render() {
     return (

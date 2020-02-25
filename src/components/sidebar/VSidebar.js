@@ -12,7 +12,7 @@ function VSidebar(params) {
           <NavLink to="/member">Member</NavLink>
         </li>
         <li>
-          <NavLink to="/gym-package">Gym Package</NavLink>
+          <NavLink to="/gym-package">Packages</NavLink>
         </li>
       </ul>
     </div>

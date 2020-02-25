@@ -64,7 +64,7 @@ export default function MemberAddForm(props) {
           <Form.Group as={Row} controlId="user_type">
             <Form.Label column md={3}>User Type</Form.Label>
             <Col md={9}>
-              <Form.Control as="select">
+              <Form.Control as="select"s>
                 <option value="" >Select</option>
                 <option value="1" selected={(props.formData.user_type && props.formData.user_type === 1) ? "selected" : ""}>Admin</option>
                 <option value="2" selected={(props.formData.user_type && props.formData.user_type === 2) ? "selected" : ""}>Normal</option>
