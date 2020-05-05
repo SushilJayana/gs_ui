@@ -41,8 +41,10 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
+const url = process.env.API_URL;
 ReactDOM.render(
   <Provider store={store}>
+    <h1>{url}</h1>
     <Router />
   </Provider>,
   document.getElementById("root")

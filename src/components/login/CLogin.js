@@ -11,7 +11,7 @@ class CLogin extends React.Component {
     }
     this.submitLogin = this.submitLogin.bind(this);
   }
-
+  
   componentDidMount() {
     if (localStorage.getItem("token")) {
       this.props.history.push("/dashboard")
@@ -19,11 +19,8 @@ class CLogin extends React.Component {
   }
 
   submitLogin(event) {
+    
     event.preventDefault();
-
-    //this.props.toggleLoggedStatus();
-    //return;
-
     const username = event.target.form.elements.username.value;
     const password = event.target.form.elements.password.value;
 
@@ -35,7 +32,6 @@ class CLogin extends React.Component {
     }
 
     try {
-
       fetch("http://localhost:3005/api/gs/login", {
         method: "POST",
         headers: {
@@ -59,13 +55,7 @@ class CLogin extends React.Component {
             })
           }
         });
-
-    } catch (error) {
-
-      alert(error)
-
-    }
-
+    } catch (error) { alert(error)}
   }
 
   render() {

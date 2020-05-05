@@ -10,7 +10,6 @@ class CMember extends React.Component {
     this.state = {
       members: null,
       modalShow: false,
-      formToken: null,
       startDate: new Date(),
       formData: {
         id: "",
@@ -45,7 +44,6 @@ class CMember extends React.Component {
           members: data
         });
       });
-
   }
 
   handleChange = date => {
@@ -73,21 +71,11 @@ class CMember extends React.Component {
   //Add Form
   showAddForm(e) {
     e.preventDefault();
-
-    fetch("http://localhost:3005/api/gs/token")
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        this.setState({
-          formToken: data.token,
-          formData: { id: "" },
-          startDate: new Date()
-        });
-
-        this.toggleModalAppear(true);
-        //this.props.toggleModalAppear("SHOW");
-      });
+    this.setState({
+      formData: { id: "" },
+      startDate: new Date()
+    });
+    this.toggleModalAppear(true);
   }
 
   handleAddNewMember(e) {
@@ -122,7 +110,7 @@ class CMember extends React.Component {
           this.toggleModalAppear(false);
           //this.props.toggleModalAppear("HIDE");
         } else {
-            alert(data.message);
+          alert(data.message);
         }
       });
   }
@@ -133,40 +121,28 @@ class CMember extends React.Component {
     e.preventDefault();
 
     const id = e.target.parentNode.parentElement.id;
-
-    fetch("http://localhost:3005/api/gs/token")
+    //data
+    fetch("http://localhost:3005/api/gs/member/" + id)
       .then(results => {
         return results.json();
       })
       .then(data => {
+
         this.setState({
-          formToken: data.token
+          formData: {
+            id: id,
+            username: data.username,
+            firstname: data.firstname,
+            lastname: data.lastname,
+            user_type: data.user_type,
+            password: data.password,
+            joined_date: data.joined_date
+          },
+          startDate: new Date(data.joined_date)
         });
-
-        //data
-        fetch("http://localhost:3005/api/gs/member/" + id)
-          .then(results => {
-            return results.json();
-          })
-          .then(data => {
-
-            this.setState({
-              formData: {
-                id: id,
-                username: data.username,
-                firstname: data.firstname,
-                lastname: data.lastname,
-                user_type: data.user_type,
-                password: data.password,
-                joined_date: data.joined_date
-              },
-              startDate: new Date(data.joined_date)
-            });
-            this.toggleModalAppear(true);
-            //this.props.toggleModalAppear("SHOW");
-          }).catch(err => {
-            alert(err.message);
-          });
+        this.toggleModalAppear(true);
+      }).catch(err => {
+        alert(err.message);
       });
   }
 
@@ -209,7 +185,6 @@ class CMember extends React.Component {
         }
 
         this.toggleModalAppear(false);
-        //this.props.toggleModalAppear("HIDE")
       });
   }
 
@@ -229,7 +204,8 @@ class CMember extends React.Component {
       method: "DELETE",
       body: JSON.stringify(postData),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token")
       }
     })
       .then(results => results.json())
@@ -266,27 +242,13 @@ class CMember extends React.Component {
           handleAddNewMember={this.handleAddNewMember}
           handleEditMember={this.handleEditMember}
 
-          formToken={this.state.formToken}
+          formToken={localStorage.getItem("token")}
           formData={this.state.formData}
         />
       </Fragment>
     );
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    formStatistics: state.memberFormStat
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleModalAppear: (type, payload) => {
-      dispatch({ type: type, payload: payload });
-    }
-  };
-};
 
 export default CMember;
 //export default connect(mapStateToProps, mapDispatchToProps)(CMember);
