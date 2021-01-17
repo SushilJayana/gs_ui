@@ -5,7 +5,7 @@ import Router from "./Router";
 //import * as serviceWorker from "./serviceWorker";
 import reducerManager from "./reducers/reducerManager";
 import { createStore } from "redux";
-import { Provider } from "react-redux";
+import { Provider } from "react-redux";	
 
 /*
 
@@ -44,7 +44,7 @@ const store = createStore(
 const url = process.env.API_URL;
 ReactDOM.render(
   <Provider store={store}>
-    <h1>{url}</h1>
+    <h1>{process.env.API_URL}</h1>
     <Router />
   </Provider>,
   document.getElementById("root")

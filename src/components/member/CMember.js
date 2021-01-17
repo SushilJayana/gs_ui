@@ -36,45 +36,27 @@ class CMember extends React.Component {
 
   componentDidMount() {
     fetch("http://localhost:3005/api/gs/member")
-      .then(results => {
-        return results.json();
-      })
-      .then(data => {
-        this.setState({
-          members: data
-        });
-      });
+      .then(results => { return results.json(); })
+      .then(data => { this.setState({ members: data }); });
   }
 
   handleChange = date => {
-    this.setState({
-      startDate: date
-    });
+    this.setState({ startDate: date });
   };
 
   toggleModalAppear(showFlag) {
-    this.setState({
-      modalShow: showFlag
-    });
+    this.setState({ modalShow: showFlag });
   }
 
   handlePasswordChange() {
-    if (!this.state.passwordDisabled) {
-      document.getElementById('password').disabled = true;
-      this.setState({ passwordDisabled: true });
-    } else {
-      document.getElementById('password').disabled = false;
-      this.setState({ passwordDisabled: false });
-    }
+    document.getElementById('password').disabled = !(this.state.passwordDisabled);
+    this.setState({ passwordDisabled: !(this.state.passwordDisabled) });
   }
 
   //Add Form
   showAddForm(e) {
     e.preventDefault();
-    this.setState({
-      formData: { id: "" },
-      startDate: new Date()
-    });
+    this.setState({ formData: { id: "" }, startDate: new Date() });
     this.toggleModalAppear(true);
   }
 
@@ -101,17 +83,14 @@ class CMember extends React.Component {
     })
       .then(results => results.json())
       .then(data => {
-        if (data.status) {
-          let finalMemberArray = this.state.members;
-          finalMemberArray.push(data.payload);
-          this.setState({
-            members: finalMemberArray
-          })
-          this.toggleModalAppear(false);
-          //this.props.toggleModalAppear("HIDE");
-        } else {
-          alert(data.message);
-        }
+
+        if (!data.status) { alert(data.message); return false; }
+
+        let finalMemberArray = this.state.members;
+        finalMemberArray.push(data.payload);
+        this.setState({ members: finalMemberArray })
+        this.toggleModalAppear(false);
+
       });
   }
 
@@ -155,7 +134,7 @@ class CMember extends React.Component {
       username: e.target.form.elements.username.value,
       firstname: e.target.form.elements.firstname.value,
       lastname: e.target.form.elements.lastname.value,
-      user_type: e.target.form.elements.user_type.value,
+      user_type: parseInt(e.target.form.elements.user_type.value),
       password: e.target.form.elements.password.value,
       joined_date: e.target.form.elements.joined_date.value
     };
@@ -171,19 +150,13 @@ class CMember extends React.Component {
       .then(results => results.json())
       .then(data => {
 
-        if (data.status) {
-          postData.password = null;
+        if (!data.status) { alert(data.message); return false; }
 
-          let finalMemberArray = (this.state.members).filter(member => member._id !== id);
-          finalMemberArray.push(postData)
-          this.setState({
-            formData: { id: "" },
-            members: finalMemberArray
-          });
-        } else {
-          alert(data.message);
-        }
-
+        delete postData.password;
+        postData._id = id;
+        let finalMemberArray = (this.state.members).filter(member => member._id !== id);
+        finalMemberArray.push(postData)
+        this.setState({ formData: { id: "" }, members: finalMemberArray });
         this.toggleModalAppear(false);
       });
   }
@@ -193,9 +166,7 @@ class CMember extends React.Component {
     e.preventDefault();
 
     const confirmation = window.confirm("Are you sure you want to delete? ");
-    if (!confirmation) {
-      return false;
-    }
+    if (!confirmation) { return false; }
 
     const id = e.target.parentNode.parentElement.id;
     const postData = { id: id };
@@ -211,9 +182,7 @@ class CMember extends React.Component {
       .then(results => results.json())
       .then(data => {
         const finalMemberArray = (this.state.members).filter(member => member._id !== id);
-        this.setState({
-          members: finalMemberArray
-        });
+        this.setState({ members: finalMemberArray });
       });
   }
 

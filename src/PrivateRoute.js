@@ -9,6 +9,7 @@ import Layout from "./Layout";
 export default function PrivateRoute({ children, ...rest }) {
     let isAuthenticated = false;
     isAuthenticated = localStorage.getItem("token");
+    isAuthenticated = true;
     return (
         <Route
             {...rest}
